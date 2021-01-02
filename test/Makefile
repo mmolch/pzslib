@@ -2,20 +2,20 @@ CC_PREFIX=
 CC=gcc
 CC_FLAGS=-ansi
 
-all: join cat
-clean: clean_join clean_cat
+all: join.app cat.app
+clean: clean_join.app clean_cat.app
 
-join: join.c ../pzslib/pzs_join.h
+join.app: join.c ../pzslib/pzs_join.h
 	$(CC_PREFIX)$(CC) $(CC_FLAGS) -o $@ $^
 
-clean_join:
-	[ ! -f join ] || rm join
+clean_join.app:
+	[ ! -f join.app ] || rm join.app
 
 
-cat: cat.c ../pzslib/pzs_cat.h
+cat.app: cat.c ../pzslib/pzs_cat.h
 	$(CC_PREFIX)$(CC) $(CC_FLAGS) -o $@ $^
 
-clean_cat:
-	[ ! -f cat ] || rm cat
+clean_cat.app:
+	[ ! -f cat.app ] || rm cat.app
 
 
