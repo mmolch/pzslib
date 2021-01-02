@@ -1,6 +1,6 @@
 /**************************************************************************************************
- *  File:    pzs_cat.h
- *  Purpose: Concatenate strings into a single, NUL terminated string
+ *  File:    pzs_copy.h
+ *  Purpose: Copies a string, ensuring that the resulting string is NUL terminated
  *  Author:  Moritz Molch <mail@moritzmolch.de>
  *  Created: 02.01.2021
  *  License: Public Domain
@@ -14,28 +14,29 @@ extern "C" {
 #define PZS_PREFIX(function) pzs_##function
 #endif
 
-#ifndef PZS_CAT_H
-#define PZS_CAT_H
+#ifndef PZS_COPY_H
+#define PZS_COPY_H
 
 /**
- * @brief Concatenate strings into a single, NUL terminated string
+ * @brief Copies a string, ensuring that the resulting string is NUL terminated
  *
  * @example
- * int newString_size = pzs_cat(NULL, "One", "Two", "Three", NULL);
- * char newString[newString_size];
- * newString_size = pzs_cat((char*)&newString, "One", "Two", "Three", NULL);
- * if (newString_size < 0) {
+ * char text[] = "Hello World";
+ * int text_copy_size = pzs_copy(NULL, text);
+ * char text_copy[text_copy_size];
+ * text_copy_size = pzs_copy((char*)&text_copy, text);
+ * if (text_copy_size < 0) {
  *     // ERROR
  * }
- * // newString: "OneTwoThree"
+ * // text_copy: "Hello World"
  *
  * @param outString destination buffer, set to NULL to only get the size
  *
  * @return the size of the resulting string (including a terminal NUL * character), -1 on error
  */
-int PZS_PREFIX(cat)(char *outString, ...);
+int PZS_PREFIX(copy)(char *outString, char *otherString);
 
-#endif /* PZS_CAT_H */
+#endif /* PZS_COPY_H */
 
 /**************************************************************************************************
  * Implementation
@@ -43,33 +44,15 @@ int PZS_PREFIX(cat)(char *outString, ...);
 
 #ifdef PZS_IMPLEMENTATION
 
-#include <stdarg.h>
 #include <string.h>
 
-int PZS_PREFIX(cat)(char *outString, ...)
+int PZS_PREFIX(copy)(char *outString, char *otherString)
 {
-    va_list args;
-    char *arg = NULL;
-    int outString_size = 1;
-
-    va_start(args, outString);
-
-    arg = va_arg(args, char*);
-    while (arg != NULL) {
-        size_t arg_length = strlen(arg);
-        outString_size += arg_length;
-
-        if (outString != NULL) {
-            memcpy(outString, arg, arg_length);
-            outString += arg_length;
-        }
-
-        arg = va_arg(args, char*);
-    }
-    va_end(args);
+    int outString_size = strlen(otherString)+1;
 
     if (outString != NULL) {
-        outString[0] = '\0';
+        memcpy(outString, otherString, outString_size-1);
+        outString[outString_size-1] = '\0';
     }
 
     return outString_size;
