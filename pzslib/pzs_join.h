@@ -1,13 +1,17 @@
-//=================================================================================================
-//  File:    pzs_join.h
-//  Purpose: Concatenate a string array into a single string, separated by another string
-//  Author:  Moritz Molch <mail@moritzmolch.de>
-//  Created: 01.01.2021
-//  License: Public Domain
-//=================================================================================================
+/**************************************************************************************************
+ *  File:    pzs_join.h
+ *  Purpose: Concatenate a string array into a single string, separated by another string
+ *  Author:  Moritz Molch <mail@moritzmolch.de>
+ *  Created: 01.01.2021
+ *  License: Public Domain
+ *************************************************************************************************/
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#ifndef PZS_PREFIX
+#define PZS_PREFIX(function) pzs_##function
 #endif
 
 #ifndef PZS_JOIN_H
@@ -31,19 +35,19 @@ extern "C" {
  *
  * @return the size of the resulting string (including a terminal NUL * character), -1 on error
  */
-int pzs_join(char *outString, const char *separator, int num_strings, const char const *strings[]);
+int PZS_PREFIX(join)(char *outString, const char *separator, int num_strings, const char const *strings[]);
 
-#endif // PZS_JOIN_H
+#endif /* PZS_JOIN_H */
 
-//=================================================================================================
-// Implementation
-//=================================================================================================
+/**************************************************************************************************
+ * Implementation
+ *************************************************************************************************/
 
 #ifdef PZS_IMPLEMENTATION
 
 #include <string.h>
 
-int pzs_join(char *outString, const char *separator, int num_strings, const char const *strings[])
+int PZS_PREFIX(join)(char *outString, const char *separator, int num_strings, const char const *strings[])
 {
     if ((separator == NULL) || (strings==NULL) || (num_strings<0)) {
         return -1;
@@ -75,7 +79,9 @@ int pzs_join(char *outString, const char *separator, int num_strings, const char
     int separator_length = strlen(separator);
     int outString_size = separator_length*(num_strings-1)+1;
 
-    for (int i=0; i<num_strings; i++) {
+    int i;
+
+    for (i=0; i<num_strings; i++) {
         outString_size += strlen(strings[i]);
     }
 
@@ -84,7 +90,7 @@ int pzs_join(char *outString, const char *separator, int num_strings, const char
     }
 
     char* pos = outString;
-    for (int i=0; i<num_strings; i++) {
+    for (i=0; i<num_strings; i++) {
         if (strings[i] == NULL) {
             continue;
         }
@@ -102,7 +108,7 @@ int pzs_join(char *outString, const char *separator, int num_strings, const char
     return outString_size;
 }
 
-#endif //PZS_IMPLEMENTATION
+#endif  /* PZS_IMPLEMENTATION */
 
 #ifdef __cplusplus
 }
