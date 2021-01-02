@@ -10,10 +10,6 @@
 extern "C" {
 #endif
 
-#ifndef PZS_PREFIX
-#define PZS_PREFIX(function) pzs_##function
-#endif
-
 #ifndef PZS_COPY_H
 #define PZS_COPY_H
 
@@ -34,7 +30,7 @@ extern "C" {
  *
  * @return the size of the resulting string (including a terminal NUL * character), -1 on error
  */
-int PZS_PREFIX(copy)(char *outString, char *otherString);
+int pzs_copy(char *outString, char *otherString);
 
 #endif /* PZS_COPY_H */
 
@@ -46,8 +42,15 @@ int PZS_PREFIX(copy)(char *outString, char *otherString);
 
 #include <string.h>
 
-int PZS_PREFIX(copy)(char *outString, char *otherString)
+int pzs_copy(char *outString, char *otherString)
 {
+    if (otherString == NULL) {
+        if (outString != NULL) {
+            outString[0] = '\0';
+        }
+        return 1;
+    }
+
     int outString_size = strlen(otherString)+1;
 
     if (outString != NULL) {

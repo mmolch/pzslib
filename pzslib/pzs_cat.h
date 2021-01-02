@@ -10,10 +10,6 @@
 extern "C" {
 #endif
 
-#ifndef PZS_PREFIX
-#define PZS_PREFIX(function) pzs_##function
-#endif
-
 #ifndef PZS_CAT_H
 #define PZS_CAT_H
 
@@ -33,7 +29,7 @@ extern "C" {
  *
  * @return the size of the resulting string (including a terminal NUL * character), -1 on error
  */
-int PZS_PREFIX(cat)(char *outString, ...);
+int pzs_cat(char *outString, ...);
 
 #endif /* PZS_CAT_H */
 
@@ -46,7 +42,7 @@ int PZS_PREFIX(cat)(char *outString, ...);
 #include <stdarg.h>
 #include <string.h>
 
-int PZS_PREFIX(cat)(char *outString, ...)
+int pzs_cat(char *outString, ...)
 {
     va_list args;
     char *arg = NULL;

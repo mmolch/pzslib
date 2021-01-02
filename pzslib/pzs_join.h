@@ -10,10 +10,6 @@
 extern "C" {
 #endif
 
-#ifndef PZS_PREFIX
-#define PZS_PREFIX(function) pzs_##function
-#endif
-
 #ifndef PZS_JOIN_H
 #define PZS_JOIN_H
 
@@ -35,7 +31,7 @@ extern "C" {
  *
  * @return the size of the resulting string (including a terminal NUL * character), -1 on error
  */
-int PZS_PREFIX(join)(char *outString, const char *separator, int num_strings, const char const *strings[]);
+int pzs_join(char *outString, const char *separator, int num_strings, const char const *strings[]);
 
 #endif /* PZS_JOIN_H */
 
@@ -47,7 +43,7 @@ int PZS_PREFIX(join)(char *outString, const char *separator, int num_strings, co
 
 #include <string.h>
 
-int PZS_PREFIX(join)(char *outString, const char *separator, int num_strings, const char const *strings[])
+int pzs_join(char *outString, const char *separator, int num_strings, const char const *strings[])
 {
     if ((separator == NULL) || (strings==NULL) || (num_strings<0)) {
         return -1;
